@@ -7,9 +7,11 @@ fn main() {
         
     let mut v = vec![1, 2, 3, 4, 5];
     assert_eq!(find_median(&mut v), 3);
+    assert_eq!(find_mode(&mut v), 1);
 
     let mut v1 = vec![4, 2, 6, 3, 1, 5];
     assert_eq!(find_median(&mut v1), 3);
+    assert_eq!(find_mode(&mut v), 2);
 
     println!("v: {:?}", v);
     println!("v1: {:?}", v1);
@@ -70,4 +72,29 @@ fn find_median(list: &mut Vec<i32>) -> i32 {
     }
 }
 
+fn find_mode(list: &mut Vec<i32>) -> Vec<i32> {
+    let mut map = HashMap::new();
 
+    for num in list {
+        let count = map.entry(num).or_insert(0);
+        *count += 1;
+    }
+
+    let mut max = 0;
+    let mut mode = 0;
+
+    let mut modes: Vec<i32> = Vec::new();
+
+    for (key, value) in map {
+        if value > max {
+            max = value;
+        }
+    }
+
+    for (key, value) in map {
+        if value == max {
+            modes.push(*key);
+        }
+    }
+    return modes;
+}
