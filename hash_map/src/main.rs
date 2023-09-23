@@ -1,4 +1,6 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, vec};
+use std::time::Instant;
+
 
 fn main() {
     overwriting_value();
@@ -7,14 +9,25 @@ fn main() {
         
     let mut v = vec![1, 2, 3, 4, 5];
     assert_eq!(find_median(&mut v), 3);
-    assert_eq!(find_mode(&mut v), 1);
+    assert_eq!(find_mode(&mut v).len(), 5);
 
     let mut v1 = vec![4, 2, 6, 3, 1, 5];
     assert_eq!(find_median(&mut v1), 3);
-    assert_eq!(find_mode(&mut v), 2);
+    assert_eq!(find_mode(&mut v1).len(), 6);
 
-    println!("v: {:?}", v);
-    println!("v1: {:?}", v1);
+    let mut v2 = vec![5, 2, 6, 3, 1, 5];
+    assert_eq!(find_mode(&mut v2).len(), 1);
+
+    let before = Instant::now();
+    assert_eq!(convert_string_to_pig_latin("first apple"), "irst-fay apple-hey");
+    convert_string_to_pig_latin("first apple");
+    println!("Elapsed time: {:.2?}", before.elapsed());
+
+    let before1 = Instant::now();
+    convert_string_to_pig_latin1("first apple");
+    assert_eq!(convert_string_to_pig_latin1("first apple"), "irst-fay apple-hey");
+    println!("Elapsed time: {:.2?}", before1.elapsed());
+     
 }
 
 // Example of how to use Hash Map
@@ -81,11 +94,10 @@ fn find_mode(list: &mut Vec<i32>) -> Vec<i32> {
     }
 
     let mut max = 0;
-    let mut mode = 0;
 
     let mut modes: Vec<i32> = Vec::new();
 
-    for (key, value) in map {
+    for (_, &value) in map.iter() {
         if value > max {
             max = value;
         }
@@ -97,4 +109,63 @@ fn find_mode(list: &mut Vec<i32>) -> Vec<i32> {
         }
     }
     return modes;
+}
+
+fn convert_string_to_pig_latin(sentence: &str) -> String {
+    let mut pig_latin = String::new();
+    let words = sentence.split_whitespace();
+
+    for word in words {
+        let mut chars = word.chars();
+        let first_char = chars.next().unwrap();
+        let rest = chars.as_str();
+
+        let mut new_word = String::new();
+        if first_char == 'a' || first_char == 'e' || first_char == 'i' || first_char == 'o' || first_char == 'u' {
+            new_word.push_str(&word);
+            new_word.push_str("-hey");
+            pig_latin.push_str(&new_word);
+            pig_latin.push(' ');
+            continue;
+        }
+
+        new_word.push_str(rest);
+        new_word.push('-');
+        new_word.push(first_char);
+        new_word.push_str("ay");
+
+        pig_latin.push_str(&new_word);
+        pig_latin.push(' ');
+    }
+    return pig_latin.trim().to_string();
+}
+
+fn convert_string_to_pig_latin1(text: &str) -> String {
+    let mut result: Vec<String> = Vec::new();
+    for word in text.split_whitespace() {
+        let first_char = &word.chars().next();
+        if let Some(c) = &first_char {
+            let mut w = String::from(word);
+            if c == &'a' || c == &'e' || c == &'i' || c == &'o' || c == &'u' {
+                result.push(w + "-hey");
+            } else {
+                let removed_c = w.remove(0);
+                w.push('-');
+                w.push(removed_c);
+                w.push_str("ay");
+                result.push(w)
+            }
+        }
+    }
+    result.join(" ")
+}
+
+fn is_vowels(c: &char) -> bool {
+    let vowels: &str = "aeiou";
+    for v in vowels.chars() {
+        if v == *c {
+            return true;
+        }
+    }
+    return false;
 }
