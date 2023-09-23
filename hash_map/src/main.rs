@@ -1,4 +1,4 @@
-use std::{collections::HashMap, vec};
+use std::{ collections::HashMap, vec, io };
 use std::time::Instant;
 
 
@@ -6,7 +6,7 @@ fn main() {
     overwriting_value();
     adding_a_key_and_value_only_if_a_key_is_not_present();
     updating_a_value_based_on_the_old_value();
-        
+
     let mut v = vec![1, 2, 3, 4, 5];
     assert_eq!(find_median(&mut v), 3);
     assert_eq!(find_mode(&mut v).len(), 5);
@@ -27,8 +27,11 @@ fn main() {
     convert_string_to_pig_latin1("first apple");
     assert_eq!(convert_string_to_pig_latin1("first apple"), "irst-fay apple-hey");
     println!("Elapsed time: {:.2?}", before1.elapsed());
-     
+
+    employee_name_and_department();
+
 }
+
 
 // Example of how to use Hash Map
 fn overwriting_value() {
@@ -111,6 +114,7 @@ fn find_mode(list: &mut Vec<i32>) -> Vec<i32> {
     return modes;
 }
 
+// Ex.2
 fn convert_string_to_pig_latin(sentence: &str) -> String {
     let mut pig_latin = String::new();
     let words = sentence.split_whitespace();
@@ -160,12 +164,52 @@ fn convert_string_to_pig_latin1(text: &str) -> String {
     result.join(" ")
 }
 
-fn is_vowels(c: &char) -> bool {
-    let vowels: &str = "aeiou";
-    for v in vowels.chars() {
-        if v == *c {
-            return true;
+// Ex.3
+fn employee_name_and_department() {
+    println!("Welcome to Employee management program");
+    println!("Please input the employee's name and thier department. (e.g. 'Add Sally to Engineering', 'Add Amir to Sales')");
+    let mut employee_list = HashMap::new();
+
+    loop {
+        let mut input_str = String::new();
+
+        io::stdin()
+            .read_line(&mut input_str)
+            .expect("Failed to read line. read user input value");
+
+        let input_str: &str = input_str.trim();
+        let mut words = input_str.split_whitespace();
+        let first_word = words.next();
+        if first_word == None {
+            println!("Please input the employee's name and thier department, in this pattern 'Add <NAME> to <DEPARTMENT>'");
+            continue;
         }
+        let name = words.next();
+        if name == None {
+            println!("Please input the employee's name and thier department, in this pattern 'Add <NAME> to <DEPARTMENT>'");
+            continue;
+        }
+        let third_word = words.next();
+        if third_word == None {
+            println!("Please input the employee's name and thier department, in this pattern 'Add <NAME> to <DEPARTMENT>'");
+            continue;
+        }
+        let department = words.next();
+        if department == None {
+            println!("Please input the employee's name and thier department, in this pattern 'Add <NAME> to <DEPARTMENT>'");
+            continue;
+        }
+
+        if first_word == Some("Add") && third_word == Some("to") {
+            let employee = employee_list.entry(String::from(department.unwrap())).or_insert(Vec::new());
+            employee.push(String::from(name.unwrap()));
+            employee.sort();
+        } else {
+            println!("Please input the employee's name and thier department, in this pattern 'Add <NAME> to <DEPARTMENT>'");
+        }
+
+        println!("Employee list: {:#?}", employee_list);
     }
-    return false;
+
 }
+

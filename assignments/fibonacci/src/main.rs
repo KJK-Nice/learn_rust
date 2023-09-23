@@ -40,6 +40,7 @@ fn fib_recursive (n: u64) -> u64 {
         return n;
     }
     {
-        return fib(n - 1) + fib(n - 2);
+        return fib_recursive(n - 1) + fib_recursive(n - 2);
     }
 }
+
