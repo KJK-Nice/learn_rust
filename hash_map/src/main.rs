@@ -28,8 +28,6 @@ fn main() {
     assert_eq!(convert_string_to_pig_latin1("first apple"), "irst-fay apple-hey");
     println!("Elapsed time: {:.2?}", before1.elapsed());
 
-    employee_name_and_department();
-
 }
 
 

@@ -2,7 +2,7 @@ use std::io;
 
 fn main() {
     println!("Welcome to Convert Temperatures program");
-    println!("Please select convert mode.\n1. f2c\n2. c2f");
+    println!("Please select convert mode.\nTypes 'f2c' for Fahrenheit to Celsius\nTypes 'c2f' for Celsius to Fahrenheit");
 
     let mut convert_mode = String::new();
 
